@@ -1,17 +1,19 @@
 angular.module('MainController', [])
 
-.controller('HomeController', function($scope) {
-  console.log('home page');
-})
+  .controller('HomeController', function($scope) {
+    console.log('home page');
+  })
   .controller('RegisterController', function($scope, Auth, $window, $location) {
-
+    // stores register form parameters when user clicks 'register'
     $scope.register = {
       email: '',
       password: ''
     };
 
     $scope.registerUser = function() {
+      // use Auth service to send form parameters as a POST request to register route
       Auth.register($scope.register).then(function(res) {
+        // if register route responds with a token, save it in sessionStorage and redirect to account page
         if (res.data.token) {
           $window.sessionStorage.token = res.data.token;
           $location.url('/account');
@@ -26,31 +28,30 @@ angular.module('MainController', [])
 
     $scope.loginUser = function() {
 
+      // concatenate the login form parameters and store string
       $scope.authString = $scope.login.email + ':' + $scope.login.password;
 
+      // use Auth service to send base64 encoded authString as a GET request to login route
       Auth.login(btoa($scope.authString)).then(function(res) {
-        // if the token exists, store it in session storage and redirect to account page
+        // if login route responds with a token, store it in sessionStorage and redirect to account page
         if (res.data.token) {
           $window.sessionStorage.token = res.data.token;
           $location.url('/account');
         }
       });
     }
+
   })
   .controller('AccountController', function($scope, Post, $rootScope) {
 
-    $scope.allPosts = [];
-
-    $scope.updatePost = {};
-
-
-    $scope.showPost = function(index){
-      $scope.post = $scope.allPosts[index];
-      $scope.selectedIndex = index;
-    };  
-
+    $scope.allPosts = []; // stores all the post objects created by the authenticated user
+    $scope.updatePost = {}; // stores the post properties of the post being updated
     $scope.selectedIndex = null;
 
+    $scope.showPost = function(index){
+      $scope.post = $scope.allPosts[index]; // stores the selected post
+      $scope.selectedIndex = index; // stores the index of the selected post
+    };
 
     $scope.newPostControls = {
       interfaceIsOpen: false,
@@ -76,7 +77,6 @@ angular.module('MainController', [])
       }
     };
 
-
     $scope.editPost = function() {
       Post.updatePost($scope.updatePost).then(function(data) {
         console.log(data);
@@ -99,25 +99,24 @@ angular.module('MainController', [])
 
   })
 
+  // DIRECTIVES
+  .directive("contenteditable", function() {
+    return {
+      restrict: "A",
+      require: "ngModel",
+      link: function(scope, element, attrs, ngModel) {
 
-// DIRECTIVES
-.directive("contenteditable", function() {
-  return {
-    restrict: "A",
-    require: "ngModel",
-    link: function(scope, element, attrs, ngModel) {
+        function read() {
+          ngModel.$setViewValue(element.html());
+        }
 
-      function read() {
-        ngModel.$setViewValue(element.html());
+        ngModel.$render = function() {
+          element.html(ngModel.$viewValue || "");
+        };
+
+        element.bind("blur keyup change", function() {
+          scope.$apply(read);
+        });
       }
-
-      ngModel.$render = function() {
-        element.html(ngModel.$viewValue || "");
-      };
-
-      element.bind("blur keyup change", function() {
-        scope.$apply(read);
-      });
-    }
-  };
-})
+    };
+  });

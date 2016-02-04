@@ -38,9 +38,20 @@ angular.module('MainController', [])
     }
   })
   .controller('AccountController', function($scope, Post, $rootScope, Broadcast) {
-    // List of all posts
     $scope.allPosts = [];
+    // $scope.query = {
+    //   search = '';
+    // };
+    // $scope.searchDB = function() {
+    //   Post.searchPost($scope.query).then(function(res) {
+    //     $scope.allPosts = []; // reset allPosts
+    //     $scope.allPosts = res.data.posts;
+    //   });
+    // };
+    // List of all posts
+    // $scope.allPosts = [];
     // Empty object for updating post
+
     $scope.updatePost = {};
     //
     $scope.selectedIndex = null;

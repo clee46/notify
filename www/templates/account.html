@@ -25,7 +25,16 @@
 	<!-- Post Previews -->
 	<div class="post-preview-container">
 		<div class="post-preview-inside">
-			<div class="post-preview" ng-class="{selected: $index==selectedIndex}" ng-click="showPost($index)" ng-repeat="post in allPosts | filter:{ createdOn:  createdOn}">
+			<!-- <form id="tagForm">Search By Tags: -->
+				<!-- <select id="noteTags" ng-options="post as post.title for post in allPosts track by post.title" ng-model="tags"> -->
+				<!-- <option class="tagColor" value="">None</option>
+				<option class="tagColor" value="first">first</option>
+				<option class="tagColor" value="third">third</option> -->
+			<!-- </form> -->
+			<input type="search" ng-model="search" placeholder="Search...">
+			<!-- <input type="search" ng-model="search" placeholder="Search..."> -->
+			<!-- <div class="post-preview" ng-class="{selected: $index==selectedIndex}" ng-click="showPost($index)" ng-repeat="post in allPosts | filter:search"> -->
+			<div class="post-preview" ng-class="{selected: $index==selectedIndex}" ng-click="showPost($index)" ng-repeat="post in allPosts | filter:search">
 				<div class="post-preview-title">
 					{{post.title}}
 					<a ng-click="updatePostControls.getOnePost($index)">Edit</a>

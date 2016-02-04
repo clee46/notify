@@ -27,6 +27,25 @@ userRouter.get('/posts', authCheck, (req, res) => {
 	});
 });
 
+userRouter.post('/search', authCheck, jsonParser, (req, res) => {
+	console.log(req.body);
+	// Post.find({
+	// 	author_id: req.user._id
+	// }, (err, data) => {
+	// 	if (err) {
+	// 		return res.status(500).json({
+	// 			msg: 'Error finding posts'
+	// 		})
+	// 	}
+	//
+	// 	res.status(200).json({
+	// 		msg: 'All posts retrieved',
+	// 		posts: data
+	// 	});
+	// });
+});
+
+
 userRouter.post('/new', authCheck, jsonParser, (req, res) => {
 	var newPost = new Post(req.body);
 	newPost.author_id = req.user._id;

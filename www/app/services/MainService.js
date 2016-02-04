@@ -39,6 +39,10 @@ angular.module('MainService', [])
       var uri = baseUri + '/posts';
       return $http.get(uri);
     };
+    this.searchPost = function(searchPost) {
+      var uri = baseUri + '/search';
+      return $http.post(uri, searchPost);
+    };
     this.createPost = function(newPost) {
       var uri = baseUri + '/new';
       return $http.post(uri, newPost);
